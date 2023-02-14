@@ -23,12 +23,8 @@ Test:
 
   # scripts which needs to be run before main script
   before_script:
-    
     - cd ./src
-    - npm ci
-    # - npm install 
-    # - npm test
-    # - npm install react-test-renderer
+    - npm i
 
   # main script for testing django app
   script:
