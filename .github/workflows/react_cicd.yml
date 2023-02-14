@@ -34,14 +34,12 @@ jobs:
     
     # installing node dependencies
     - name: Install dependencies
-
-      run: |
-        cd ./app
-        ls
-        npm i
+      working-directory: ./app
+      run: npm i
 
     # testing 
     - name: testing the app
+      working-directory: ./app
       run: npm test --ignore-scripts
 
   
