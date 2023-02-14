@@ -1,0 +1,87 @@
+# defining all stages
+stages: 
+  - test
+  - build
+  - deploy 
+
+# testing stage
+Test:
+  # defining the stage name
+  stage: test
+
+  # only on prod mode
+  only:
+    refs:
+    - prod
+
+  # defining specific runners
+  # tags:
+  #   - my-runner
+
+  # defining the base image 
+  image: hub.hamdocker.ir/library/node:lts-alpine
+
+  # scripts which needs to be run before main script
+  before_script:
+    
+    - cd ./src
+    - npm ci
+    # - npm install 
+    # - npm test
+    # - npm install react-test-renderer
+
+  # main script for testing django app
+  script:
+    - npm test --ignore-scripts
+
+
+# building stage
+darkube_build:
+  
+  # name of the stage 
+  stage: build
+  
+  # using darkube image cli
+  image: hamravesh.hamdocker.ir/public/darkube-cli:v1.1
+
+  # only doing the job in prod mode
+  only:
+    refs:
+    - stage
+
+  # defining specific runners
+  # tags:
+  #   - my-runner
+
+  # running build script for the project
+  # name of the predefined env variables: https://github.com/gitlabhq/gitlabhq/blob/master/doc/ci/variables/predefined_variables.md
+  script:
+  - 'darkube build --push -t $IMAGE:$CI_COMMIT_SHORT_SHA -t $IMAGE:$CI_COMMIT_REF_SLUG  --workdir
+    . --file ./dockerfiles/prod/Dockerfile --build-context . '
+
+  
+
+# deployment stage
+darkube_deploy:
+  
+  # name of the stage 
+  stage: deploy
+
+  # using darkube image cli
+  image: hamravesh.hamdocker.ir/public/darkube-cli:v1.1
+  
+  # only doing the job in prod mode
+  only:
+    refs:
+    - prod
+  
+  # defining specific runners
+  # tags:
+  #   - my-runner
+
+  # running deploy script for the project
+  # name of the predefined env variables: https://github.com/gitlabhq/gitlabhq/blob/master/doc/ci/variables/predefined_variables.md
+  script:
+  - darkube deploy --ref prod --token ${DARKUBE_DEPLOY_TOKEN} --app-id
+    ${DARKUBE_APP_ID}  --image-tag "${CI_COMMIT_SHORT_SHA}" --job-id
+    "${CI_JOB_ID}" --stateless-app true
