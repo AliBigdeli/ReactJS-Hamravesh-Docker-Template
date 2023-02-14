@@ -34,7 +34,10 @@ jobs:
     
     # installing node dependencies
     - name: Install dependencies
-      run: npm ci
+
+      run: |
+        echo "NODE_ENV=development"
+        "npm install"
 
     # testing 
     - name: testing the app
