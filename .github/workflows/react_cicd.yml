@@ -20,6 +20,11 @@ jobs:
     # which operating system its going to use
     runs-on: ubuntu-latest
 
+    # changing directory defaults for app
+    defaults:
+      run:
+        working-directory: ./app
+
     # steps which it will go through for test
     steps:
     
@@ -34,12 +39,10 @@ jobs:
     
     # installing node dependencies
     - name: Install dependencies
-      working-directory: ./app
       run: npm i
 
     # testing 
     - name: testing the app
-      working-directory: ./app
       run: npm test --ignore-scripts
 
   
