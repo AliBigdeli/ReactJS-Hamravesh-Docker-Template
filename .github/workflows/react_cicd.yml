@@ -38,6 +38,7 @@ jobs:
       run: |
         cd ./app
         echo "NODE_ENV=development"
+        npm install react-scripts@latest --force
         npm Install
 
     # testing 
