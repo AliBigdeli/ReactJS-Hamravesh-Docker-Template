@@ -42,71 +42,71 @@ jobs:
 
   
   
-  Build:
-    # check if it passed the test phase
-    if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
+  # Build:
+  #   # check if it passed the test phase
+  #   if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
 
-    # declaring the name of this job
-    name: Build
+  #   # declaring the name of this job
+  #   name: Build
 
-    # depending the job to the test phase
-    needs: Test
+  #   # depending the job to the test phase
+  #   needs: Test
 
-    # choosing which os to run on
-    runs-on: ubuntu-latest
+  #   # choosing which os to run on
+  #   runs-on: ubuntu-latest
 
-    # choosing darkube cli for building
-    container: hamravesh.hamdocker.ir/public/darkube-cli:v1.1
+  #   # choosing darkube cli for building
+  #   container: hamravesh.hamdocker.ir/public/darkube-cli:v1.1
 
-    # steps which it will go through for test
-    steps:
+  #   # steps which it will go through for test
+  #   steps:
     
-    # bringing the code and checking 
-    - uses: actions/checkout@v3
+  #   # bringing the code and checking 
+  #   - uses: actions/checkout@v3
 
-    # making environment variables ready for darkube cli (translating from github actions to gitlab ci naming)
-    # src https://docs.github.com/en/actions/learn-github-actions/variables
-    - name: Creating preneeded envs
-      run: |
-        echo "SHORT_SHA=`echo ${CI_COMMIT_SHORT_SHA} | cut -c1-8`" >> $GITHUB_ENV
-        echo "CI_COMMIT_REF_SLUG=`echo ${CI_REF_NAME_SLUG}`" >> $GITHUB_ENV
+  #   # making environment variables ready for darkube cli (translating from github actions to gitlab ci naming)
+  #   # src https://docs.github.com/en/actions/learn-github-actions/variables
+  #   - name: Creating preneeded envs
+  #     run: |
+  #       echo "SHORT_SHA=`echo ${CI_COMMIT_SHORT_SHA} | cut -c1-8`" >> $GITHUB_ENV
+  #       echo "CI_COMMIT_REF_SLUG=`echo ${CI_REF_NAME_SLUG}`" >> $GITHUB_ENV
 
-    # executing build script to build the current project image in private registry
-    - name: Connect and build
-      script:
-        - 'darkube build --push -t $IMAGE:$CI_COMMIT_SHORT_SHA -t $IMAGE:$CI_COMMIT_REF_SLUG  --workdir
-          . --file ./dockerfiles/prod/django/Dockerfile --build-context . '
+  #   # executing build script to build the current project image in private registry
+  #   - name: Connect and build
+  #     run: |
+  #       'darkube build --push -t $IMAGE:$CI_COMMIT_SHORT_SHA -t $IMAGE:$CI_COMMIT_REF_SLUG  --workdir
+  #         . --file ./dockerfiles/prod/django/Dockerfile --build-context . '
 
 
-  Deploy:
-    if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
-    name: Build
+  # Deploy:
+  #   if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
+  #   name: Build
 
-    # depends on build job
-    needs: Build
+  #   # depends on build job
+  #   needs: Build
 
-    # choosing which os to run on
-    runs-on: ubuntu-latest
+  #   # choosing which os to run on
+  #   runs-on: ubuntu-latest
 
-    # choosing darkube cli for building
-    container: hamravesh.hamdocker.ir/public/darkube-cli:v1.1
-    steps:
+  #   # choosing darkube cli for building
+  #   container: hamravesh.hamdocker.ir/public/darkube-cli:v1.1
+  #   steps:
 
-    # checking out the code
-    - uses: actions/checkout@v3
+  #   # checking out the code
+  #   - uses: actions/checkout@v3
     
     
-    # making environment variables ready for darkube cli (translating from github actions to gitlab ci naming)
-    # src https://docs.github.com/en/actions/learn-github-actions/variables
-    - name: Creating preneeded envs
-      uses: FranzDiebold/github-env-vars-action@v2
-      run: |
-        echo "SHORT_SHA=`echo ${CI_COMMIT_SHORT_SHA} | cut -c1-8`" >> $GITHUB_ENV
-        echo "CI_COMMIT_REF_SLUG=`echo ${CI_REF_NAME_SLUG}`" >> $GITHUB_ENV
+  #   # making environment variables ready for darkube cli (translating from github actions to gitlab ci naming)
+  #   # src https://docs.github.com/en/actions/learn-github-actions/variables
+  #   - name: Creating preneeded envs
+  #     uses: FranzDiebold/github-env-vars-action@v2
+  #     run: |
+  #       echo "SHORT_SHA=`echo ${CI_COMMIT_SHORT_SHA} | cut -c1-8`" >> $GITHUB_ENV
+  #       echo "CI_COMMIT_REF_SLUG=`echo ${CI_REF_NAME_SLUG}`" >> $GITHUB_ENV
 
-    # executing deploy script to set the current project image in private registry
-    - name: Connect and deploy
-      script:
-        - darkube deploy --ref prod --token ${DARKUB_DEPLOY_TOKEN} --app-id
-          ${DARKUBE_APP_ID}  --image-tag "${CI_COMMIT_SHORT_SHA}" --job-id
-          "${CI_JOB_ID}" --stateless-app true
+  #   # executing deploy script to set the current project image in private registry
+  #   - name: Connect and deploy
+  #     run: |
+  #       - darkube deploy --ref prod --token ${DARKUB_DEPLOY_TOKEN} --app-id
+  #         ${DARKUBE_APP_ID}  --image-tag "${CI_COMMIT_SHORT_SHA}" --job-id
+  #         "${CI_JOB_ID}" --stateless-app true
