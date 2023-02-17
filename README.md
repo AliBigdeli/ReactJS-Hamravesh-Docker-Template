@@ -25,7 +25,7 @@
 - [Hamravesh deployment](#hamravesh-deployment)
   - [0- Create an account](#0--create-an-account)
   - [1- Create a repo app](#1--create-a-repo-app)
-  - [3- Setup django app](#3--setup-django-app)
+  - [3- Setup react app](#3--setup-react-app)
     - [1- General info](#1--general-info)
     - [2- Environment Variables](#2--environment-variables)
     - [3- Domain Address](#3--domain-address)
@@ -69,7 +69,7 @@ going to download a few Docker images and build the Python + requirements depend
 docker compose up --build
 ```
 
-Now that everything is built and running we can treat it like any other Django
+Now that everything is built and running we can treat it like any other ReactJS
 app.
 
 ## Note
