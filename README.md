@@ -1,5 +1,5 @@
 <div align="center">
-<img loading="lazy" style="width:700px" src="./docs/hamravesh-banner.png">
+<img loading="lazy" style="width:700px" src="./docs/banner.png">
 <h1 align="center">ReactJS Hamravesh Docker Template</h1>
 <h3 align="center">Sample Project to use hamravesh service provider for reactjs app</h3>
 </div>
