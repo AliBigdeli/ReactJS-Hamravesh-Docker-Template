@@ -5,9 +5,11 @@ services:
     container_name: app
     build:
       context: .
-      dockerfile: dockerfiles/dev/Dockerfile
-    command: npm start
+      dockerfile: ./dockerfiles/dev/Dockerfile
     volumes:
-      - ./app:/usr/src/app
+      - ./app/:/usr/src/app/
+      - /usr/src/app/node_modules
+    environment:
+      - WATCHPACK_POLLING=true
     ports:
       - 3000:3000
