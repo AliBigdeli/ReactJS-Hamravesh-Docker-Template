@@ -129,7 +129,7 @@ Note: as we are going to implement ci/cd and other stuffs we avoid auto deployme
 after your done with the inputs just click on (تنظیمات اپ) and go for next step.
 
 
-## 3- Setup django app
+## 3- Setup react app
 follow the provided steps to finish this section.
 
 ### 1- General info
